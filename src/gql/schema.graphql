@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Tag {
+  id: ID!
+  pid: Int!
+  name: String!
+  color: String!
+}
+
+type TagUpdate {
+  action: Action!
+  tag: Tag!
+}
+
+enum Action {
+  ADD
+  EDIT
+  DELETE
+}
+
+type TagListPaginated {
+  pages: Int!
+  total: Int!
+  tags: [Tag!]!
+}
+
+type Query {
+  tagList(pagination: PaginationOptions!): TagListPaginated!
+}
+
+input PaginationOptions {
+  limit: Int!
+  page: Int!
+}
+
+type Mutation {
+  createTag(name: String!): Boolean!
+  editTag(name: String!, id: String!): Boolean!
+  deleteTag(id: String!): Boolean!
+}
+
+type Subscription {
+  updateTagList: TagUpdate!
+}
