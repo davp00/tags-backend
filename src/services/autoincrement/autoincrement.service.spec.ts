@@ -34,6 +34,14 @@ describe('AutoincrementService', () => {
         currentSequence + 1,
       );
     });
+
+    it('should return next sequence increased by 10', async function () {
+      const currentSequence = await service.getSequence(TEST_MODULE);
+      const incValue = 10;
+      expect(await service.getSequence(TEST_MODULE, incValue)).toEqual(
+        currentSequence + incValue,
+      );
+    });
   });
 
   beforeAll((done) => {

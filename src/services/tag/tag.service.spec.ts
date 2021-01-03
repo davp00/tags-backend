@@ -71,15 +71,21 @@ describe('TagService', () => {
   });
 
   describe('editTag', function () {
-    const tagNewName = 'TEST_NEW';
+    const tagNewName = 'LABEL_EDIT_TEST';
+    let tag: Tag;
+
+    beforeEach(async function () {
+      tag = await service.createTag('NEW_LABEL_EDIT_TEST');
+    });
+
     it('should return true on tag edited', async function () {
-      let tag: Tag = await tagModel.findOne().sort({ createdAt: -1 });
       const result = await service.editTag(tag.id, tagNewName);
 
       tag = await tagModel.findById(tag.id);
       expect(result).toBe(true);
       expect(tag.name).toEqual(tagNewName);
     });
+
     it('should return false on tag not found', async function () {
       const result = await service.editTag(randomId, tagNewName);
 
@@ -88,8 +94,13 @@ describe('TagService', () => {
   });
 
   describe('deleteTag', function () {
+    let tag: Tag;
+
+    beforeEach(async function () {
+      tag = await service.createTag('NEW_LABEL_DELETE_TEST');
+    });
+
     it('should return true on tag deleted', async function () {
-      let tag: Tag = await tagModel.findOne().sort({ createdAt: -1 });
       const result = await service.deleteTag(tag.id);
 
       tag = await tagModel.findById(tag.id);
@@ -97,9 +108,15 @@ describe('TagService', () => {
       expect(tag).toBeNull();
     });
 
-    it('should return true on tag not found', async function () {
+    it('should return false on tag not found', async function () {
       const result = await service.deleteTag(randomId);
       expect(result).toBe(false);
+    });
+  });
+
+  describe('insertTags', function () {
+    it('should return true on 10 tags inserted', async function () {
+      expect(await service.insertTags(10)).toBe(true);
     });
   });
 

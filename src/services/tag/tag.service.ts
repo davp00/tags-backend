@@ -14,13 +14,13 @@ import { PaginationOptions } from '../../gql/types/pagination.options';
 import { TagListPaginated } from '../../gql/types/taglist.paginated';
 
 /**
- * Service in charge of Tag Document actions
+ * Service in charge of Tag Document actions.
  */
 @Injectable()
 export class TagService {
   /**
    * Constructor to which the corresponding dependencies are injected by the different modules for the correct functioning of the service
-   * @param tagModel Mongoose model for different {@linkcode Tag} queries
+   * @param tagModel Mongoose model for different {@linkcode Tag} queries.
    * @param autoIncrementService Injection service to handle the auto-increment strategy
    * @param pubSub Class that allows the communication of events to graphql subscriptions
    */
@@ -36,7 +36,7 @@ export class TagService {
   private static readonly hexLetters = '0123456789ABCDEF';
 
   /**
-   * Gets a list of paginated tags
+   * Gets a list of paginated tags.
    * @param paginationOptions paging options
    * @returns Tag list paginated
    */
@@ -45,6 +45,7 @@ export class TagService {
   ): Promise<TagListPaginated> {
     const sort = { createdAt: -1 };
     const { page, limit } = paginationOptions;
+
     try {
       const res = await this.tagModel.aggregate([
         {
@@ -77,7 +78,7 @@ export class TagService {
   }
 
   /**
-   * generates a color from hexadecimal characters
+   * generates a color from hexadecimal characters.
    * @private
    * @returns Hexadecimal color
    */
@@ -91,7 +92,7 @@ export class TagService {
 
   /**
    * Creates a new label from a name, generating its color with {@linkcode generateColor}
-   * and sequential identification with {@linkcode AutoIncrementService.getSequence}
+   * and sequential identification with {@linkcode AutoIncrementService.getSequence}.
    * @param name tag's name to create
    * @returns created Tag
    */
@@ -112,7 +113,7 @@ export class TagService {
   }
 
   /**
-   * Edits the name of a tag with its identification
+   * Edits the name of a tag with its identification.
    * @param id tag identification to edit
    * @param name new tag name
    * @returns true on action done, false when the action fails
@@ -139,6 +140,31 @@ export class TagService {
     const tag: Tag = await this.tagModel.findByIdAndDelete(id);
     await this.emitUpdateAction(tag, ActionE.DELETE);
     return !!tag;
+  }
+
+  /**
+   * Creates a number of labels with generated values.
+   * @param nTags number of Tags to create
+   */
+  public async insertTags(nTags: number): Promise<boolean> {
+    const toSeq = await this.autoIncrementService.getSequence(
+      TAG_MODEL_NAME,
+      nTags,
+    );
+    const tags: Tag[] = [];
+
+    for (let i: number = toSeq - nTags + 1; i <= toSeq; i++) {
+      const tag = new this.tagModel();
+      tag.color = TagService.generateColor();
+      tag._pid = i;
+      tag.name = `Tag #${i}`;
+
+      tags.push(tag);
+    }
+
+    const result = await this.tagModel.insertMany(tags);
+
+    return result.length === nTags;
   }
 
   /**

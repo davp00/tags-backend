@@ -28,12 +28,16 @@ export class AutoIncrementService {
   /**
    * Generates the following sequence of the model sent by parameter
    * @param modelN Model name
+   * @param incValue Increment value default {@linkcode AutoIncrementService.AUTO_INCREMENT_VALUE}
    * @returns Next model sequence
    */
-  public async getSequence(modelN: string): Promise<number> {
+  public async getSequence(
+    modelN: string,
+    incValue: number = AutoIncrementService.AUTO_INCREMENT_VALUE,
+  ): Promise<number> {
     const data: AutoIncrement = await this.autoIncModel.findOneAndUpdate(
       { modelN },
-      { $inc: { seq: AutoIncrementService.AUTO_INCREMENT_VALUE } },
+      { $inc: { seq: incValue } },
       {
         upsert: true,
         new: true,

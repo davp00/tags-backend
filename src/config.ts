@@ -3,6 +3,9 @@ import * as dotenv from 'dotenv';
 
 // Get environment variables
 /* istanbul ignore next */
+/**
+ * Defines which environment variables will be used
+ */
 const envFileName =
   process.env.NODE_ENV === 'test' ? '../.env.test' : '../.env';
 

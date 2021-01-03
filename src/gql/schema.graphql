@@ -39,6 +39,7 @@ type Mutation {
   createTag(name: String!): Boolean!
   editTag(name: String!, id: String!): Boolean!
   deleteTag(id: String!): Boolean!
+  insertTags(nTags: Int!): Boolean!
 }
 
 type Subscription {

@@ -4,14 +4,12 @@ import { GqlModule } from '../gql.module';
 import { AutoIncrementModel, TagModel } from '../../models';
 import { TagService } from '../../services/tag/tag.service';
 import { AutoIncrementService } from '../../services/autoincrement/autoincrement.service';
-import { getModelToken, MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { Tag } from '../../models/tag';
-import { Model } from 'mongoose';
 import { TagResolver } from './tag.resolver';
 import { PaginationOptions } from '../types/pagination.options';
 
 describe('TagResolver', () => {
-  let tagModel;
   let resolver: TagResolver;
   let tagService: TagService;
 
@@ -25,7 +23,6 @@ describe('TagResolver', () => {
       providers: [TagService, AutoIncrementService, TagResolver],
     }).compile();
 
-    tagModel = module.get<Model<Tag>>(getModelToken(TagModel.name));
     resolver = module.get<TagResolver>(TagResolver);
     tagService = module.get<TagService>(TagService);
   });
@@ -51,16 +48,26 @@ describe('TagResolver', () => {
   });
 
   describe('editTag Graphql entry', function () {
+    let tag: Tag;
+
+    beforeEach(async function () {
+      tag = await tagService.createTag('NEW_LABEL_DELETE_TEST');
+    });
+
     it('should return true on tag edited', async function () {
       const tagName = 'NEW_NAME_GRAPHQL';
-      const tag: Tag = await tagModel.findOne().sort({ createdAt: -1 });
       expect(await resolver.editTag(tag.id, tagName)).toBe(true);
     });
   });
 
   describe('deleteTag Graphql entry', function () {
+    let tag: Tag;
+
+    beforeEach(async function () {
+      tag = await tagService.createTag('NEW_LABEL_DELETE_TEST');
+    });
+
     it('should return true on tag deleted', async function () {
-      const tag: Tag = await tagModel.findOne().sort({ createdAt: -1 });
       expect(await resolver.deleteTag(tag.id)).toBe(true);
     });
   });
@@ -68,6 +75,12 @@ describe('TagResolver', () => {
   describe('updateTagList Subscription', function () {
     it('should return subscription listener', function () {
       expect(resolver.updateTagList()).toBeDefined();
+    });
+  });
+
+  describe('insertTags Graphql entry', function () {
+    it('should return true on 10 tags inserted', async function () {
+      expect(await resolver.insertTags(10)).toBe(true);
     });
   });
 });

@@ -68,12 +68,23 @@ export class TagResolver {
   }
 
   /**
-   * Uses {@linkcode TagService.deleteTag} to delete the tag
+   * Uses {@linkcode TagService.deleteTag} to delete the tag.
    * @param id
-   * @returns true on delete Tag done
+   * @returns true on delete Tag done.
    */
   @Mutation(GraphqlField.boolean)
   deleteTag(@Args('id') id: string) {
     return this.tagService.deleteTag(id);
+  }
+
+  /**
+   * Uses {@linkcode TagService.insertTags} to insert a defined number of tags.
+   * @param nTags number of Tags to create, provided by graphql client
+   */
+  @Mutation(GraphqlField.boolean)
+  insertTags(
+    @Args('nTags', { type: GraphqlField.int }) nTags: number,
+  ): Promise<boolean> {
+    return this.tagService.insertTags(nTags);
   }
 }
