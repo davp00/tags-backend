@@ -43,7 +43,7 @@ export class TagService {
   public async getTags(
     paginationOptions: PaginationOptions,
   ): Promise<TagListPaginated> {
-    const sort = { createdAt: -1 };
+    const sort = { _pid: -1 };
     const { page, limit } = paginationOptions;
 
     try {
