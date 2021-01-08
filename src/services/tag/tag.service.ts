@@ -138,7 +138,7 @@ export class TagService {
    */
   public async deleteTag(id: string): Promise<boolean> {
     const tag: Tag = await this.tagModel.findByIdAndDelete(id);
-    await this.emitUpdateAction(tag, ActionE.DELETE);
+    if (tag) await this.emitUpdateAction(tag, ActionE.DELETE);
     return !!tag;
   }
 
