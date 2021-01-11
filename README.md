@@ -1,11 +1,26 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Tags Backend
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Tag application endpoint, made in graphql with NestJs.
+You can check the [Documentation](http://159.203.88.25:8080/overview.html).
+<br/><br/>
+[Frontend Code.](https://github.com/davp00/tags-frontend)
 
+## Live Preview
+you can see 
+a live preview in [Backend EndPoint](http://159.203.88.25:3000/graphql).
+
+## Environment
+<strong>Note: to run 
+the tests it is necessary to create the file ".env.test" 
+with the same variables and different values (recommended), 
+for correct operation.</strong>
+```dotenv
+NODE_ENV=development
+PORT=3000
+MONGO_DB_URI=mongodb://your-host/your-db
+```
 ## Installation
 
 ```bash
@@ -26,21 +41,22 @@ $ npm run start:prod
 ```
 
 ## Test
-
+[Coverage Report](http://159.203.88.25:8081/)
 ```bash
 # unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Initialize Tags
+you can initialize a defined number of tags with the InsertTags mutation
+```graphql
+mutation InsertTags($nTags: Int!){
+  insertTags(nTags: $nTags)
+}
+```
 
 ## Stay in touch
 
