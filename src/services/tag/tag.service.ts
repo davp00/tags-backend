@@ -61,6 +61,7 @@ export class TagService {
           },
         ])
         .allowDiskUse(true);
+
       const [{ paginatedResult, count }] = res;
       const [{ totalCount }] = count;
       const nPages = totalCount / limit;
