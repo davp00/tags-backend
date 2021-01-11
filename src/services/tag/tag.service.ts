@@ -47,18 +47,20 @@ export class TagService {
     const { page, limit } = paginationOptions;
 
     try {
-      const res = await this.tagModel.aggregate([
-        {
-          $facet: {
-            paginatedResult: [
-              { $sort: sort },
-              { $skip: (page - 1) * limit },
-              { $limit: limit },
-            ],
-            count: [{ $count: 'totalCount' }],
+      const res = await this.tagModel
+        .aggregate([
+          {
+            $facet: {
+              paginatedResult: [
+                { $sort: sort },
+                { $skip: (page - 1) * limit },
+                { $limit: limit },
+              ],
+              count: [{ $count: 'totalCount' }],
+            },
           },
-        },
-      ]);
+        ])
+        .allowDiskUse(true);
       const [{ paginatedResult, count }] = res;
       const [{ totalCount }] = count;
       const nPages = totalCount / limit;
