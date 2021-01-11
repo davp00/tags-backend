@@ -8,7 +8,7 @@ You can check the [Documentation](http://159.203.88.25:8080/overview.html).
 [Frontend Code.](https://github.com/davp00/tags-frontend)
 
 ## Live Preview
-you can see 
+You can see 
 a live preview in [Backend EndPoint](http://159.203.88.25:3000/graphql).
 
 ## Environment
@@ -51,7 +51,7 @@ $ npm run test:cov
 ```
 
 ## Initialize Tags
-you can initialize a defined number of tags with the InsertTags mutation
+You can initialize a defined number of tags with the InsertTags mutation
 ```graphql
 mutation InsertTags($nTags: Int!){
   insertTags(nTags: $nTags)
